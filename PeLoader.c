@@ -22,7 +22,12 @@ typedef struct {
     uint32_t TlsSize;
 } PE_OPTIONAL_COMMON;
 
-int rva_to_offset(uint32_t rva, IMAGE_SECTION_HEADER *section, uint16_t numSections,uint32_t *outOffset);
+int rva_to_offset(
+    uint32_t rva, 
+    IMAGE_SECTION_HEADER *section, 
+    uint16_t numSections,
+    uint32_t *outOffset
+);
 void relocation64(
     uint8_t *imageBase, 
     uint64_t preferredBase, 
@@ -55,7 +60,12 @@ void runTLScallsbacks(
     PE_OPTIONAL_COMMON common,
     int is64
 );
-void* VaToPtr(uint64_t va, uint64_t imageBase, uint8_t* mappedBase, uint32_t sizeOfImage);
+void* VaToPtr(
+    uint64_t va, 
+    uint64_t imageBase, 
+    uint8_t* mappedBase, 
+    uint32_t sizeOfImage
+);
 
 int main(int argc,char **argv){
     if(argc != 2){
@@ -361,13 +371,23 @@ int main(int argc,char **argv){
         fseek(f,cur, SEEK_SET);
     }
     printf("\n");
+/*==================================================================================================*/
+/*End of parsing pahse*/
 
-        imageMemory = VirtualAlloc(
+    imageMemory = VirtualAlloc(
         (LPVOID)(uintptr_t)common.ImageBase,
         common.SizeOfImage,
         MEM_RESERVE | MEM_COMMIT,
         PAGE_READWRITE
     );
+    
+/*For testcase T11*/
+    // imageMemory = VirtualAlloc(
+    //     NULL,
+    //     common.SizeOfImage,
+    //     MEM_RESERVE | MEM_COMMIT,
+    //     PAGE_READWRITE
+    // );
 
     if(!imageMemory){
         printf("[!] Allocate at preferred base failed, trying anywhere\n");
